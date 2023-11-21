@@ -1,6 +1,3 @@
-"""Rule set for installing all reference genome """
-
-
 configfile: "../config/config.json"
 
 
@@ -18,7 +15,9 @@ rule all:
 rule install_genome:
     message:
         """
-        d
+        Installs target genome(s) under install dir
+        - Regex to filter down to main chromosomes
+        - Default provider set to UCSC
         """
     output:
         "{build}/{build}.fa.gz",
@@ -26,9 +25,8 @@ rule install_genome:
         install_dir=INSTALL_DIR,
         build=lambda wc: "{}".format(wc.build),
     conda:
-        "genome"
-    threads: 
-        4
+        "envs/genome.yaml"
+    threads: 4
     shell:
         """
         genomepy plugin enable blacklist &&

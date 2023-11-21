@@ -31,7 +31,7 @@ rule install_genome:
         """
         genomepy plugin enable blacklist &&
         genomepy install {params.build} \
-        --provider UCSC \
+        --provider "UCSC" \
         --genomes_dir {params.install_dir} \
         --bgzip \
         --threads 4 \

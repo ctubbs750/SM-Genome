@@ -1,5 +1,5 @@
 # Snakemake workflow - genome
-This workflow performs d
+This workflow is used to install a reference genome and all associated files.
 
 # Usage
 d

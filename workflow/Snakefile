@@ -1,0 +1,41 @@
+"""Rule set for installing all reference genome """
+
+
+configfile: "../config/config.json"
+
+
+# Parameters
+INSTALL_DIR = config["INSTALL_DIR"]
+GENOME_BUILDS = config["GENOME_BUILDS"]
+
+
+rule all:
+    input:
+        expand("{build}/{build}.fa.gz", build=GENOME_BUILDS),
+    default_target: True
+
+
+rule install_genome:
+    message:
+        """
+        d
+        """
+    output:
+        "{build}/{build}.fa.gz",
+    params:
+        install_dir=INSTALL_DIR,
+        build=lambda wc: "{}".format(wc.build),
+    conda:
+        "genome"
+    threads: 
+        4
+    shell:
+        """
+        genomepy plugin enable blacklist &&
+        genomepy install {params.build} \
+        --provider UCSC\
+        --genomes_dir {params.install_dir} \
+        --bgzip \
+        --threads 4 \
+        --regex "chr[0-9XY]+$"
+        """

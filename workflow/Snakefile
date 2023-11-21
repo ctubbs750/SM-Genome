@@ -1,4 +1,4 @@
-configfile: "../config/config.json"
+configfile: "../config/config.yaml"
 
 
 # Parameters

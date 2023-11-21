@@ -1,6 +1,0 @@
-{
-    "INSTALL_DIR": "../resources/data/genome",
-    "GENOME_BUILDS": [
-        "hg38"
-    ]
-}

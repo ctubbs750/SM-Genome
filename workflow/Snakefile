@@ -1,3 +1,9 @@
+"""
+Ruleset for installing reference genomes.
+- Depends on genomypy v.0.16.1 for output compression. 
+"""
+
+
 configfile: "../config/config.yaml"
 
 

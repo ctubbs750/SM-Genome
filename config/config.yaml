@@ -1,3 +1,9 @@
-INSTALL_DIR: ../resources/data/genome
-GENOME_BUILDS:
-  - hg38
+GENOME:
+  # Genome build
+  ASSEMBLY: hg38
+  # Genome host
+  PROVIDER: UCSC
+  # Regex filtering - filter FASTA to main chromosomes
+  FILTER: chr[0-9XY]+$
+  # Target installation directory
+  OUTDIR: resources/data/genome

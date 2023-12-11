@@ -8,10 +8,10 @@ configfile: "../config/config.yaml"
 
 
 # Parameters
-ASSEMBLY = config["ASSEMBLY"]
-PROVIDER = config["PROVIDER"]
-FILTER = config["FILTER"]
-OUTDIR = config["OUTDIR"]
+ASSEMBLY = config["GENOME"]["ASSEMBLY"]
+PROVIDER = config["GENOME"]["PROVIDER"]
+FILTER = config["GENOME"]["FILTER"]
+OUTDIR = config["GENOME"]["OUTDIR"]
 
 
 rule install_genome:

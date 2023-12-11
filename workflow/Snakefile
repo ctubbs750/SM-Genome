@@ -1,7 +1,6 @@
-"""
-Ruleset for installing reference genomes.
-- Depends on genomypy v.0.16.1 for output compression. 
-"""
+from snakemake.utils import min_version
+
+min_version("7.32.4")
 
 
 configfile: "../config/config.yaml"

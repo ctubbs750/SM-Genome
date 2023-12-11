@@ -31,7 +31,7 @@ rule install_genome:
         outdir=OUTDIR,
     conda:
         "envs/genome.yaml"
-    threads: 4
+    threads: 8
     shell:
         """
         genomepy plugin enable blacklist &&
@@ -39,6 +39,6 @@ rule install_genome:
         --provider {params.provider} \
         --genomes_dir {params.outdir} \
         --bgzip \
-        --threads 4 \
+        --threads {threads} \
         --regex {params.regex}
         """

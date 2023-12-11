@@ -8,17 +8,14 @@ configfile: "../config/config.yaml"
 
 
 # Parameters
-INSTALL_DIR = config["INSTALL_DIR"]
-GENOME_BUILDS = config["GENOME_BUILDS"]
-
-
-rule all:
-    input:
-        expand("{build}/{build}.fa.gz", build=GENOME_BUILDS),
-    default_target: True
+ASSEMBLY = config["ASSEMBLY"]
+PROVIDER = config["PROVIDER"]
+FILTER = config["FILTER"]
+OUTDIR = config["OUTDIR"]
 
 
 rule install_genome:
+    default_target: True
     message:
         """
         Installs target genome(s) under install dir
@@ -26,20 +23,22 @@ rule install_genome:
         - Default provider set to UCSC
         """
     output:
-        "{build}/{build}.fa.gz",
+        OUTDIR + f"/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
     params:
-        install_dir=INSTALL_DIR,
-        build=lambda wc: "{}".format(wc.build),
+        assembly=ASSEMBLY,
+        provider=PROVIDER,
+        regex=FILTER,
+        outdir=OUTDIR,
     conda:
         "envs/genome.yaml"
     threads: 4
     shell:
         """
         genomepy plugin enable blacklist &&
-        genomepy install {params.build} \
-        --provider "UCSC" \
-        --genomes_dir {params.install_dir} \
+        genomepy install {params.assembly} \
+        --provider {params.provider} \
+        --genomes_dir {params.outdir} \
         --bgzip \
         --threads 4 \
-        --regex "chr[0-9XY]+$"
+        --regex {params.regex}
         """

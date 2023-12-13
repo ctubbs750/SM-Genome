@@ -6,4 +6,4 @@ GENOME:
   # Regex filtering - filter FASTA to main chromosomes
   FILTER: chr[0-9XY]+$
   # Target installation directory
-  OUTDIR: ../resources/data/genome
+  OUTDIR: resources/data/genome

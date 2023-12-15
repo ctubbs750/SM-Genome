@@ -3,7 +3,7 @@ from snakemake.utils import min_version
 min_version("7.32.4")
 
 
-configfile: "../config/config.yaml"
+configfile: "config/config.yaml"
 
 
 # Parameters
@@ -30,7 +30,10 @@ rule install_genome:
         outdir=OUTDIR,
     conda:
         "envs/genome.yaml"
-    threads: 8
+    threads: 16
+    log:
+        stdout=f"workflow/logs/install_genome-{ASSEMBLY}.stdout",
+        stderr=f"workflow/logs/install_genome-{ASSEMBLY}.stderr",
     shell:
         """
         genomepy plugin enable blacklist &&

@@ -7,11 +7,16 @@ configfile: "config/config.yaml"
 
 
 # Parameters
-ASSEMBLY = config["GENOME"]["ASSEMBLY"]
+BUILDS = config["GENOME"]["BUILDS"]
 PROVIDER = config["GENOME"]["PROVIDER"]
 FILTER = config["GENOME"]["FILTER"]
 OUTDIR = config["GENOME"]["OUTDIR"]
 
+rule all:
+    input:
+        expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz", ASSEMBLY=BUILDS),
+        expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed", ASSEMBLY=BUILDS),
+        expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed", ASSEMBLY=BUILDS),
 
 rule install_genome:
     default_target: True
@@ -22,9 +27,9 @@ rule install_genome:
         - Default provider set to UCSC
         """
     output:
-        OUTDIR + f"/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
-        OUTDIR + f"/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
-        OUTDIR + f"/{ASSEMBLY}/{ASSEMBLY}.gaps.bed",
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed",
     params:
         assembly=ASSEMBLY,
         provider=PROVIDER,

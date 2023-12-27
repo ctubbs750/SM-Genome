@@ -1,6 +1,8 @@
 GENOME:
-  # Genome build
-  ASSEMBLY: hg38
+  # Genome builds
+  BUILDS:
+    - hg38
+    - hg19
   # Genome host
   PROVIDER: UCSC
   # Regex filtering - filter FASTA to main chromosomes

@@ -28,10 +28,9 @@ rule install_genome:
         """
     output:
         "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed.gz",
         "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed",
     params:
-        #build=
         provider=PROVIDER,
         regex=FILTER,
         outdir=OUTDIR,

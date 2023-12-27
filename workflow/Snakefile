@@ -23,6 +23,8 @@ rule install_genome:
         """
     output:
         OUTDIR + f"/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
+        OUTDIR + f"/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
+        OUTDIR + f"/{ASSEMBLY}/{ASSEMBLY}.gaps.bed",
     params:
         assembly=ASSEMBLY,
         provider=PROVIDER,

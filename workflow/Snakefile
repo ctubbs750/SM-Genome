@@ -44,6 +44,7 @@ rule install_genome:
     log:
         stdout="workflow/logs/install_genome-{ASSEMBLY}.stdout",
         stderr="workflow/logs/install_genome-{ASSEMBLY}.stderr",
+    cache: True # allowed values: "all", "omit-software", True
     shell:
         """
         genomepy install {wildcards.ASSEMBLY} \
@@ -70,6 +71,7 @@ rule install_blacklist:
     log:
         stdout="workflow/logs/install_blacklist-{ASSEMBLY}.stdout",
         stderr="workflow/logs/install_blacklist-{ASSEMBLY}.stderr",
+    cache: True # allowed values: "all", "omit-software", True
     shell:
         """
         if [ {wildcards.ASSEMBLY} == "hg19" ]; then

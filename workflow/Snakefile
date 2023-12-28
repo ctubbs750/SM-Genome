@@ -32,8 +32,8 @@ rule install_genome:
         - Default provider set to UCSC
         """
     output:
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed",
+        multiext("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed")
     params:
         provider=PROVIDER,
         regex=FILTER,

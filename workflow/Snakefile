@@ -46,6 +46,7 @@ rule install_genome:
         True 
     shell:
         """
+        genomepy plugin disable  blacklist &&
         genomepy install {wildcards.ASSEMBLY} \
         --provider {params.provider} \
         --genomes_dir {params.outdir} \

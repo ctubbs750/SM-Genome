@@ -73,8 +73,8 @@ rule install_blacklist:
     shell:
         """
         if [ {wildcards.ASSEMBLY} == "hg19" ]; then
-            curl {params.hg19_url} -o {params.compress} && gunzip {params.compress}
+            wget {params.hg19_url} -O {params.compress} && gunzip {params.compress}
         else
-            curl {params.hg38_url} -o {params.compress} && gunzip {params.compress}
+            wget {params.hg38_url} -O {params.compress} && gunzip {params.compress}
         fi
         """

@@ -8,18 +8,18 @@ configfile: "config/config.yaml"
 
 # Parameters
 BUILDS = config["GENOME"]["BUILDS"]
-PROVIDER = config["GENOME"]["PROVIDER"]
 FILTER = config["GENOME"]["FILTER"]
 OUTDIR = config["GENOME"]["OUTDIR"]
+PROVIDER = config["GENOME"]["PROVIDER"]
 
 rule all:
     input:
         expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz", ASSEMBLY=BUILDS),
         expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed", ASSEMBLY=BUILDS),
         expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed", ASSEMBLY=BUILDS),
+    default_target: True
 
 rule install_genome:
-    default_target: True
     message:
         """
         Installs target genome(s) under install dir

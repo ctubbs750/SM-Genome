@@ -23,7 +23,6 @@ rule all:
         expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed", ASSEMBLY=BUILDS),
     default_target: True
 
-
 rule install_genome:
     message:
         """
@@ -32,8 +31,7 @@ rule install_genome:
         - Default provider set to UCSC
         """
     output:
-        multiext("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed")
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
     params:
         provider=PROVIDER,
         regex=FILTER,
@@ -44,7 +42,8 @@ rule install_genome:
     log:
         stdout="workflow/logs/install_genome-{ASSEMBLY}.stdout",
         stderr="workflow/logs/install_genome-{ASSEMBLY}.stderr",
-    cache: True # allowed values: "all", "omit-software", True
+    cache: 
+        True 
     shell:
         """
         genomepy install {wildcards.ASSEMBLY} \
@@ -55,6 +54,27 @@ rule install_genome:
         --regex {params.regex}
         """
 
+rule confirm_gaps:
+    message:
+        """
+        Checks for installation of gaps. Weird rule, workaround.
+        """
+    input:
+        rules.install_genome.output,
+    output:
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed"
+    conda:
+        "envs/genome.yaml"
+    threads: 16
+    log:
+        stdout="workflow/logs/confirm_gaps-{ASSEMBLY}.stdout",
+        stderr="workflow/logs/confirm_gaps-{ASSEMBLY}.stderr",
+    cache: 
+        True 
+    shell:
+        """
+        if [ -f {output} ]; then exit; fi
+        """
 
 rule install_blacklist:
     message:
@@ -71,7 +91,8 @@ rule install_blacklist:
     log:
         stdout="workflow/logs/install_blacklist-{ASSEMBLY}.stdout",
         stderr="workflow/logs/install_blacklist-{ASSEMBLY}.stderr",
-    cache: True # allowed values: "all", "omit-software", True
+    cache: 
+        True
     shell:
         """
         if [ {wildcards.ASSEMBLY} == "hg19" ]; then

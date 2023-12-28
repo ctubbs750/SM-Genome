@@ -12,12 +12,17 @@ FILTER = config["GENOME"]["FILTER"]
 OUTDIR = config["GENOME"]["OUTDIR"]
 PROVIDER = config["GENOME"]["PROVIDER"]
 
+
 rule all:
     input:
         expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz", ASSEMBLY=BUILDS),
-        expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed", ASSEMBLY=BUILDS),
+        expand(
+            "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
+            ASSEMBLY=BUILDS,
+        ),
         expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed", ASSEMBLY=BUILDS),
     default_target: True
+
 
 rule install_genome:
     message:
@@ -28,7 +33,6 @@ rule install_genome:
         """
     output:
         "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
         "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed",
     params:
         provider=PROVIDER,
@@ -42,11 +46,35 @@ rule install_genome:
         stderr="workflow/logs/install_genome-{ASSEMBLY}.stderr",
     shell:
         """
-        genomepy plugin enable blacklist &&
         genomepy install {wildcards.ASSEMBLY} \
         --provider {params.provider} \
         --genomes_dir {params.outdir} \
         --bgzip \
         --threads {threads} \
         --regex {params.regex}
+        """
+
+
+rule install_blacklist:
+    message:
+        """
+        Installs ENCODE blacklist.
+        """
+    output:
+        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
+    params:
+        hg19_url=config["GENOME"]["BLACKLIST_HG19"],
+        hg38_url=config["GENOME"]["BLACKLIST_HG38"],
+        compress="resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed.gz"
+    threads: 1
+    log:
+        stdout="workflow/logs/install_blacklist-{ASSEMBLY}.stdout",
+        stderr="workflow/logs/install_blacklist-{ASSEMBLY}.stderr",
+    shell:
+        """
+        if [ {wildcards.ASSEMBLY} == "hg19" ]; then
+            curl {params.hg19_url} -o {params.compress} && gunzip {output}
+        else
+            curl {params.hg38_url} -o {params.compress} && gunzip {output}
+        fi
         """

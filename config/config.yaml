@@ -9,3 +9,6 @@ GENOME:
   FILTER: chr[0-9XY]+$
   # Target installation directory
   OUTDIR: resources/data/genome
+  # Blacklist URLs
+  BLACKLIST_HG19: https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg19-blacklist.v2.bed.gz
+  BLACKLIST_HG38: https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz

@@ -3,8 +3,8 @@ GENOME:
   BUILDS:
     - hg38
     - hg19
-  # Genome host
-  PROVIDER: UCSC
+  # Genome source
+  SOURCE: UCSC
   # Regex filtering - filter FASTA to main chromosomes
   FILTER: chr[0-9XY]+$
   # Target installation directory

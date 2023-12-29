@@ -1,27 +1,29 @@
 from snakemake.utils import min_version
 
-min_version("7.32.4")
 
-
+# Configuration
 configfile: "config/config.yaml"
 
 
 # Parameters
 BUILDS = config["GENOME"]["BUILDS"]
 FILTER = config["GENOME"]["FILTER"]
+SOURCE = config["GENOME"]["SOURCE"]
 OUTDIR = config["GENOME"]["OUTDIR"]
-PROVIDER = config["GENOME"]["PROVIDER"]
+BLACKLIST_HG19_URL = config["GENOME"]["BLACKLIST_HG19"]
+BLACKLIST_HG38_URL = config["GENOME"]["BLACKLIST_HG38"]
+
+# Settings
+min_version("7.32.4")
 
 
 rule all:
     input:
-        expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz", ASSEMBLY=BUILDS),
-        expand(
-            "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
-            ASSEMBLY=BUILDS,
-        ),
-        expand("resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed", ASSEMBLY=BUILDS),
+        expand("resources/data/genome/{BUILD}/{BUILD}.fa.gz", BUILD=BUILDS),
+        expand("resources/data/genome/{BUILD}/{BUILD}.gaps.bed", BUILD=BUILDS),
+        expand("resources/data/genome/{BUILD}/{BUILD}.blacklist.bed", BUILD=BUILDS),
     default_target: True
+
 
 rule install_genome:
     message:
@@ -31,29 +33,29 @@ rule install_genome:
         - Default provider set to UCSC
         """
     output:
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.fa.gz",
+        "resources/data/genome/{BUILD}/{BUILD}.fa.gz",
     params:
-        provider=PROVIDER,
         regex=FILTER,
+        source=SOURCE,
         outdir=OUTDIR,
     conda:
         "envs/genome.yaml"
-    threads: 16
+    threads: 24
     log:
-        stdout="workflow/logs/install_genome-{ASSEMBLY}.stdout",
-        stderr="workflow/logs/install_genome-{ASSEMBLY}.stderr",
-    cache: 
-        True 
+        stdout="workflow/logs/install_genome-{BUILD}.stdout",
+        stderr="workflow/logs/install_genome-{BUILD}.stderr",
+    cache: True
     shell:
         """
-        genomepy plugin disable  blacklist &&
-        genomepy install {wildcards.ASSEMBLY} \
-        --provider {params.provider} \
+        genomepy plugin disable blacklist &&
+        genomepy install {wildcards.BUILD} \
+        --provider {params.source} \
         --genomes_dir {params.outdir} \
         --bgzip \
         --threads {threads} \
         --regex {params.regex}
         """
+
 
 rule confirm_gaps:
     message:
@@ -63,19 +65,17 @@ rule confirm_gaps:
     input:
         rules.install_genome.output,
     output:
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.gaps.bed"
-    conda:
-        "envs/genome.yaml"
-    threads: 16
+        "resources/data/genome/{BUILD}/{BUILD}.gaps.bed",
+    threads: 1
     log:
-        stdout="workflow/logs/confirm_gaps-{ASSEMBLY}.stdout",
-        stderr="workflow/logs/confirm_gaps-{ASSEMBLY}.stderr",
-    cache: 
-        True 
+        stdout="workflow/logs/confirm_gaps-{BUILD}.stdout",
+        stderr="workflow/logs/confirm_gaps-{BUILD}.stderr",
+    cache: True
     shell:
         """
         if [ -f {output} ]; then exit; fi
         """
+
 
 rule install_blacklist:
     message:
@@ -83,22 +83,20 @@ rule install_blacklist:
         Installs ENCODE blacklist.
         """
     output:
-        "resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed",
+        "resources/data/genome/{BUILD}/{BUILD}.blacklist.bed.gz",
     params:
-        hg19_url=config["GENOME"]["BLACKLIST_HG19"],
-        hg38_url=config["GENOME"]["BLACKLIST_HG38"],
-        compress="resources/data/genome/{ASSEMBLY}/{ASSEMBLY}.blacklist.bed.gz"
+        hg19_url=BLACKLIST_HG19_URL,
+        hg38_url=BLACKLIST_HG38_URL,
     threads: 1
     log:
-        stdout="workflow/logs/install_blacklist-{ASSEMBLY}.stdout",
-        stderr="workflow/logs/install_blacklist-{ASSEMBLY}.stderr",
-    cache: 
-        True
+        stdout="workflow/logs/install_blacklist-{BUILD}.stdout",
+        stderr="workflow/logs/install_blacklist-{BUILD}.stderr",
+    cache: True
     shell:
         """
-        if [ {wildcards.ASSEMBLY} == "hg19" ]; then
-            wget {params.hg19_url} -O {params.compress} && gunzip {params.compress}
+        if [ {wildcards.BUILD} == "hg19" ]; then
+            wget {params.hg19_url} -O {output} 
         else
-            wget {params.hg38_url} -O {params.compress} && gunzip {params.compress}
+            wget {params.hg38_url} -O {output}
         fi
         """

@@ -1,0 +1,28 @@
+Workflow defines that rule install_genome is eligible for caching between workflows (use the --cache argument to enable this).
+Workflow defines that rule confirm_gaps is eligible for caching between workflows (use the --cache argument to enable this).
+Workflow defines that rule install_blacklist is eligible for caching between workflows (use the --cache argument to enable this).
+Lints for rule install_genome (line 40, /panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile):
+    * Param outdir is a prefix of input or output file but hardcoded:
+      If this is meant to represent a file path prefix, it will fail when running workflow in environments without a shared filesystem.
+      Instead, provide a function that infers the appropriate prefix from the input or output file, e.g.: lambda w, input:
+      os.path.splitext(input[0])[0]
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#non-file-parameters-for-rules
+      https://snakemake.readthedocs.io/en/stable/tutorial/advanced.html#tutorial-input-functions
+
+Lints for rule confirm_gaps (line 108, /panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile):
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the workflow can be executed on any machine without
+      prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+
+Lints for rule install_blacklist (line 155, /panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile):
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the workflow can be executed on any machine without
+      prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+

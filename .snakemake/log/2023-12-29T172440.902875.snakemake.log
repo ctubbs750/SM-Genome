@@ -1,0 +1,46 @@
+Workflow defines that rule install_genome is eligible for caching between workflows (use the --cache argument to enable this).
+Workflow defines that rule confirm_gaps is eligible for caching between workflows (use the --cache argument to enable this).
+Workflow defines that rule install_blacklist is eligible for caching between workflows (use the --cache argument to enable this).
+Lints for rule install_genome (line 35, /panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile):
+    * Shell command directly uses variable config from outside of the rule:
+      It is recommended to pass all files as input and output, and non-file parameters via the params directive. Otherwise, provenance
+      tracking is less accurate.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#non-file-parameters-for-rules
+    * Shell command directly uses variable config from outside of the rule:
+      It is recommended to pass all files as input and output, and non-file parameters via the params directive. Otherwise, provenance
+      tracking is less accurate.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#non-file-parameters-for-rules
+    * Shell command directly uses variable config from outside of the rule:
+      It is recommended to pass all files as input and output, and non-file parameters via the params directive. Otherwise, provenance
+      tracking is less accurate.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#non-file-parameters-for-rules
+
+Lints for rule confirm_gaps (line 96, /panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile):
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the workflow can be executed on any machine without
+      prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+
+Lints for rule install_blacklist (line 143, /panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile):
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the workflow can be executed on any machine without
+      prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+    * Shell command directly uses variable config from outside of the rule:
+      It is recommended to pass all files as input and output, and non-file parameters via the params directive. Otherwise, provenance
+      tracking is less accurate.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#non-file-parameters-for-rules
+    * Shell command directly uses variable config from outside of the rule:
+      It is recommended to pass all files as input and output, and non-file parameters via the params directive. Otherwise, provenance
+      tracking is less accurate.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#non-file-parameters-for-rules
+

@@ -9,7 +9,6 @@ configfile: "config/config.yaml"
 BUILDS = config["GENOME"]["BUILDS"]
 FILTER = config["GENOME"]["FILTER"]
 SOURCE = config["GENOME"]["SOURCE"]
-OUTDIR = config["GENOME"]["OUTDIR"]
 BLACKLIST_HG19_URL = config["GENOME"]["BLACKLIST_HG19"]
 BLACKLIST_HG38_URL = config["GENOME"]["BLACKLIST_HG38"]
 
@@ -37,7 +36,7 @@ rule install_genome:
     params:
         regex=FILTER,
         source=SOURCE,
-        outdir=OUTDIR,
+        outdir=lambda op, output: os.path.dirname(os.path.dirname(output[0])),
     conda:
         "envs/genome.yaml"
     threads: 24
@@ -66,6 +65,8 @@ rule confirm_gaps:
         rules.install_genome.output,
     output:
         "resources/data/genome/{BUILD}/{BUILD}.gaps.bed",
+    conda:
+        "envs/genome.yaml"
     threads: 1
     log:
         stdout="workflow/logs/confirm_gaps-{BUILD}.stdout",
@@ -87,11 +88,12 @@ rule install_blacklist:
     params:
         hg19_url=BLACKLIST_HG19_URL,
         hg38_url=BLACKLIST_HG38_URL,
+    conda:
+        "envs/genome.yaml"
     threads: 1
     log:
         stdout="workflow/logs/install_blacklist-{BUILD}.stdout",
         stderr="workflow/logs/install_blacklist-{BUILD}.stderr",
-    cache: True
     shell:
         """
         if [ {wildcards.BUILD} == "hg19" ]; then
@@ -99,4 +101,25 @@ rule install_blacklist:
         else
             wget {params.hg38_url} -O {output}
         fi
+        """
+
+
+rule decompress_blacklist:
+    message:
+        """
+        Decompresses ENCODE blacklist BED.
+        """
+    input:
+        rules.install_blacklist.output,
+    output:
+        "resources/data/genome/{BUILD}/{BUILD}.blacklist.bed",
+    conda:
+        "envs/genome.yaml"
+    threads: 1
+    log:
+        stdout="workflow/logs/decompress_blacklist-{BUILD}.stdout",
+        stderr="workflow/logs/decompress_blacklist-{BUILD}.stderr",
+    shell:
+        """
+        gunzip {input}
         """

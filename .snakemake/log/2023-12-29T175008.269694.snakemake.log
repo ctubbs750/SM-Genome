@@ -1,0 +1,90 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cores: 48
+Rules claiming more threads will be scaled down.
+Job stats:
+job                  count
+-----------------  -------
+all                      1
+confirm_gaps             2
+install_blacklist        2
+install_genome           2
+total                    7
+
+Select jobs to execute...
+
+[Fri Dec 29 17:50:18 2023]
+Job 5: 
+        Installs ENCODE blacklist.
+        
+Reason: Missing output files: resources/data/genome/hg38/hg38.blacklist.bed.gz
+
+Activating conda environment: ../../../../../../../../../../../../../home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+
+[Fri Dec 29 17:50:18 2023]
+Job 6: 
+        Installs ENCODE blacklist.
+        
+Reason: Missing output files: resources/data/genome/hg19/hg19.blacklist.bed.gz
+
+
+Activating conda environment: ../../../../../../../../../../../../../home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+[Fri Dec 29 17:50:18 2023]
+Job 2: 
+        Installs target genome(s) under install dir
+        - Regex to filter down to main chromosomes
+        - Default provider set to UCSC
+        
+Reason: Missing output files: resources/data/genome/hg19/hg19.fa.gz
+
+Activating conda environment: ../../../../../../../../../../../../../home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+Moving output file resources/data/genome/hg38/hg38.blacklist.bed.gz to cache.
+Symlinking output file resources/data/genome/hg38/hg38.blacklist.bed.gz from cache.
+[Fri Dec 29 17:50:19 2023]
+Finished job 5.
+1 of 7 steps (14%) done
+Select jobs to execute...
+Moving output file resources/data/genome/hg19/hg19.blacklist.bed.gz to cache.
+Symlinking output file resources/data/genome/hg19/hg19.blacklist.bed.gz from cache.
+[Fri Dec 29 17:50:19 2023]
+Finished job 6.
+2 of 7 steps (29%) done
+
+[Fri Dec 29 17:50:19 2023]
+Job 1: 
+        Installs target genome(s) under install dir
+        - Regex to filter down to main chromosomes
+        - Default provider set to UCSC
+        
+Reason: Missing output files: resources/data/genome/hg38/hg38.fa.gz
+
+Activating conda environment: ../../../../../../../../../../../../../home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+Terminating processes on user request, this might take some time.
+[Fri Dec 29 17:50:28 2023]
+Error in rule install_genome:
+    jobid: 1
+    output: resources/data/genome/hg38/hg38.fa.gz
+    log: workflow/logs/install_genome-hg38.stdout, workflow/logs/install_genome-hg38.stderr (check log file(s) for error details)
+    conda-env: /home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+    shell:
+        
+        genomepy plugin disable blacklist &&
+        genomepy install hg38         --provider UCSC         --genomes_dir h/g/3/8         --bgzip         --threads 24         --regex chr[0-9XY]+$
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Fri Dec 29 17:50:28 2023]
+Error in rule install_genome:
+    jobid: 2
+    output: resources/data/genome/hg19/hg19.fa.gz
+    log: workflow/logs/install_genome-hg19.stdout, workflow/logs/install_genome-hg19.stderr (check log file(s) for error details)
+    conda-env: /home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+    shell:
+        
+        genomepy plugin disable blacklist &&
+        genomepy install hg19         --provider UCSC         --genomes_dir h/g/1/9         --bgzip         --threads 24         --regex chr[0-9XY]+$
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Complete log: .snakemake/log/2023-12-29T175008.269694.snakemake.log

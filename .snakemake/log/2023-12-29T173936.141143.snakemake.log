@@ -1,0 +1,3 @@
+KeyError in file /panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile, line 12:
+'OUTDIR'
+  File "/panfs/accrepfs.vampire/data/ruderferlab/projects/biovu/cnv/cre/CTCF-Variant-Annotation/snakemake/workflows/common/genome/workflow/Snakefile", line 12, in <module>

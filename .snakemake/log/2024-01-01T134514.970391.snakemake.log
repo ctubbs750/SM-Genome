@@ -1,0 +1,38 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cores: 24
+Rules claiming more threads will be scaled down.
+Job stats:
+job               count
+--------------  -------
+all                   1
+confirm_gaps          2
+install_genome        1
+total                 4
+
+Select jobs to execute...
+
+[Mon Jan  1 13:45:44 2024]
+Job 4: 
+        Checks for installation of gaps. Weird rule, workaround.
+        
+Reason: Missing output files: resources/data/genome/hg19/hg19.gaps.bed
+
+Activating conda environment: ../../../../../../../../../../../../../home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+[Mon Jan  1 13:45:44 2024]
+Error in rule confirm_gaps:
+    jobid: 4
+    input: resources/data/genome/hg19/hg19.fa.gz
+    output: resources/data/genome/hg19/hg19.gaps.bed
+    log: workflow/logs/confirm_gaps-hg19.stdout, workflow/logs/confirm_gaps-hg19.stderr (check log file(s) for error details)
+    conda-env: /home/tubbsca/snakemake_condas/ada2ba84c8bd6f04984fd5f5fda51637_
+    shell:
+        
+        if [ -f resources/data/genome/hg19/hg19.gaps.bed ]; then exit; fi
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2024-01-01T134514.970391.snakemake.log

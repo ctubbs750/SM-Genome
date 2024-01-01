@@ -19,7 +19,6 @@ min_version("7.32.4")
 rule all:
     input:
         expand("resources/data/genome/{BUILD}/{BUILD}.fa.gz", BUILD=BUILDS),
-        expand("resources/data/genome/{BUILD}/{BUILD}.gaps.bed", BUILD=BUILDS),
         expand("resources/data/genome/{BUILD}/{BUILD}.blacklist.bed", BUILD=BUILDS),
     default_target: True
 
@@ -40,10 +39,10 @@ rule install_genome:
     conda:
         "envs/genome.yaml"
     threads: 24
+    cache: True
     log:
         stdout="workflow/logs/install_genome-{BUILD}.stdout",
         stderr="workflow/logs/install_genome-{BUILD}.stderr",
-    cache: True
     shell:
         """
         genomepy plugin disable blacklist &&
@@ -53,28 +52,6 @@ rule install_genome:
         --bgzip \
         --threads {threads} \
         --regex {params.regex}
-        """
-
-
-rule confirm_gaps:
-    message:
-        """
-        Checks for installation of gaps. Weird rule, workaround.
-        """
-    input:
-        rules.install_genome.output,
-    output:
-        "resources/data/genome/{BUILD}/{BUILD}.gaps.bed",
-    conda:
-        "envs/genome.yaml"
-    threads: 1
-    log:
-        stdout="workflow/logs/confirm_gaps-{BUILD}.stdout",
-        stderr="workflow/logs/confirm_gaps-{BUILD}.stderr",
-    cache: True
-    shell:
-        """
-        if [ -f {output} ]; then exit; fi
         """
 
 

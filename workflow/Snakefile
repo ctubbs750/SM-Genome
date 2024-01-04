@@ -58,7 +58,7 @@ rule install_genome:
 rule install_blacklist:
     message:
         """
-        Installs ENCODE blacklist.
+        Installs ENCODE blacklist BED file.
         """
     output:
         "resources/data/genome/{BUILD}/{BUILD}.blacklist.bed.gz",
@@ -84,7 +84,7 @@ rule install_blacklist:
 rule decompress_blacklist:
     message:
         """
-        Decompresses ENCODE blacklist BED.
+        Decompresses ENCODE blacklist file.
         """
     input:
         rules.install_blacklist.output,

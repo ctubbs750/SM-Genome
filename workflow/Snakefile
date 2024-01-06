@@ -61,7 +61,7 @@ rule install_blacklist:
         Installs ENCODE blacklist BED file.
         """
     output:
-        "resources/data/genome/{BUILD}/{BUILD}.blacklist.bed.gz",
+        "resources/data/genome/{BUILD}/{BUILD}.blacklist.bed",
     params:
         hg19_url=BLACKLIST_HG19_URL,
         hg38_url=BLACKLIST_HG38_URL,
@@ -73,30 +73,10 @@ rule install_blacklist:
         stderr="workflow/logs/install_blacklist-{BUILD}.stderr",
     shell:
         """
-        if [ {wildcards.BUILD} == "hg19" ]; then
-            wget {params.hg19_url} -O {output} 
+        if [ {wildcards.BUILD} == "hg19" ]
+        then
+            wget -O - {params.hg19_url} | gunzip > {output}
         else
-            wget {params.hg38_url} -O {output}
+            wget -O - {params.hg38_url} | gunzip > {output}
         fi
-        """
-
-
-rule decompress_blacklist:
-    message:
-        """
-        Decompresses ENCODE blacklist file.
-        """
-    input:
-        rules.install_blacklist.output,
-    output:
-        "resources/data/genome/{BUILD}/{BUILD}.blacklist.bed",
-    conda:
-        "envs/genome.yaml"
-    threads: 1
-    log:
-        stdout="workflow/logs/decompress_blacklist-{BUILD}.stdout",
-        stderr="workflow/logs/decompress_blacklist-{BUILD}.stderr",
-    shell:
-        """
-        gunzip {input}
         """

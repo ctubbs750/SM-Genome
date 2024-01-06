@@ -6,11 +6,11 @@ configfile: "config/config.yaml"
 
 
 # Parameters
-BUILDS = config["BUILDS"]
-FILTER = config["FILTER"]
-SOURCE = config["SOURCE"]
-BLACKLIST_HG19_URL = config["BLACKLIST_HG19"]
-BLACKLIST_HG38_URL = config["BLACKLIST_HG38"]
+BUILDS = config["builds"]
+FILTER = config["filter"]
+SOURCE = config["source"]
+BLACKLIST_HG19_URL = config["blacklist_hg19"]
+BLACKLIST_HG38_URL = config["blacklist_hg38"]
 
 # Settings
 min_version("7.32.4")
@@ -37,7 +37,7 @@ rule install_genome:
         source=SOURCE,
         outdir=lambda op, output: os.path.dirname(os.path.dirname(output[0])),
     conda:
-        "envs/genome.yaml"
+        "../envs/genome.yaml"
     threads: 24
     cache: True
     log:
@@ -66,7 +66,7 @@ rule install_blacklist:
         hg19_url=BLACKLIST_HG19_URL,
         hg38_url=BLACKLIST_HG38_URL,
     conda:
-        "envs/genome.yaml"
+        "../envs/genome.yaml"
     threads: 1
     log:
         stdout="workflow/logs/install_blacklist-{BUILD}.stdout",

@@ -1,4 +1,0 @@
-Workflow defines that rule install_genome is eligible for caching between workflows (use the --cache argument to enable this).
-Workflow defines that rule confirm_gaps is eligible for caching between workflows (use the --cache argument to enable this).
-Workflow defines that rule install_blacklist is eligible for caching between workflows (use the --cache argument to enable this).
-Congratulations, your workflow is in a good condition!

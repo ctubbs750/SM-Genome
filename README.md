@@ -12,4 +12,4 @@ This module is designed to be incorporated into an existing Snakemake pipeline f
 
  `/resources/data/genome/{build}`
 
- For this module to function, it will look for paramters under the `GENOME` tag in config file.  Copy and paste the config parameters found in `/config/config.yaml` into the desired project's config file and edit as needed.
+ For this module to function, it will look for parameters under the `GENOME` tag in config file.  Copy and paste the config parameters found in `/config/config.yaml` into the desired project's config file and edit as needed.

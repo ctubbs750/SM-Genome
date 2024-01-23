@@ -1,24 +1,38 @@
+from os import listdir, path
 from snakemake.utils import min_version
 
-
-# Configuration
-configfile: "config/config.yaml"
-
-
-# Parameters
-BUILDS = config["builds"]
-FILTER = config["filter"]
-SOURCE = config["source"]
-BLACKLIST_HG19_URL = config["blacklist_hg19"]
-BLACKLIST_HG38_URL = config["blacklist_hg38"]
 
 # Settings
 min_version("7.32.4")
 
 
+# ------------- #
+# Config        #
+# ------------- #
+
+BUILDS = config["builds"]
+FILTER = config["filter"]
+SOURCE = config["source"]
+INSTALL_DIR = config["install_dir"]
+BLACKLIST_HG19_URL = config["blacklist_hg19"]
+BLACKLIST_HG38_URL = config["blacklist_hg38"]
+
+# ------------- #
+# I/O           #
+# ------------- #
+
+# Raw PWM and TFBS download
+INSTALLED_GENOME = path.join(INSTALL_DIR, "{build}", "{build}.fa.gz")
+INSTALLED_BLACKLIST = path.join(INSTALL_DIR, "{build}", "{build}.blacklist.bed")
+
+# ------------- #
+# Rules         #
+# ------------- #
+
+
 rule all:
     input:
-        expand("resources/data/genome/{BUILD}/{BUILD}.fa.gz", BUILD=BUILDS),
+        expand(INSTALLED_GENOME, build=BUILDS),
         expand("resources/data/genome/{BUILD}/{BUILD}.blacklist.bed", BUILD=BUILDS),
     default_target: True
 
@@ -31,22 +45,22 @@ rule install_genome:
         - Default provider set to UCSC
         """
     output:
-        "resources/data/genome/{BUILD}/{BUILD}.fa.gz",
+        INSTALLED_GENOME,
     params:
         regex=FILTER,
         source=SOURCE,
-        outdir=lambda op, output: os.path.dirname(os.path.dirname(output[0])),
+        outdir=lambda op, output: path.dirname(os.path.dirname(output[0])),
     conda:
         "../envs/genome.yaml"
     threads: 24
     cache: True
     log:
-        stdout="workflow/logs/install_genome-{BUILD}.stdout",
-        stderr="workflow/logs/install_genome-{BUILD}.stderr",
+        stdout="workflow/logs/install_genome-{build}.stdout",
+        stderr="workflow/logs/install_genome-{build}.stderr",
     shell:
         """
         genomepy plugin disable blacklist &&
-        genomepy install {wildcards.BUILD} \
+        genomepy install {wildcards.build} \
         --provider {params.source} \
         --genomes_dir {params.outdir} \
         --bgzip \
@@ -61,7 +75,7 @@ rule install_blacklist:
         Installs ENCODE blacklist BED file.
         """
     output:
-        "resources/data/genome/{BUILD}/{BUILD}.blacklist.bed",
+        INSTALLED_BLACKLIST,
     params:
         hg19_url=BLACKLIST_HG19_URL,
         hg38_url=BLACKLIST_HG38_URL,
@@ -69,11 +83,11 @@ rule install_blacklist:
         "../envs/genome.yaml"
     threads: 1
     log:
-        stdout="workflow/logs/install_blacklist-{BUILD}.stdout",
-        stderr="workflow/logs/install_blacklist-{BUILD}.stderr",
+        stdout="workflow/logs/install_blacklist-{build}.stdout",
+        stderr="workflow/logs/install_blacklist-{build}.stderr",
     shell:
         """
-        if [ {wildcards.BUILD} == "hg19" ]
+        if [ {wildcards.build} == "hg19" ]
         then
             wget -O - {params.hg19_url} | gunzip > {output}
         else

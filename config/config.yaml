@@ -7,6 +7,8 @@ GENOME:
   source: UCSC
   # Regex filtering - filter FASTA to main chromosomes
   filter: chr[0-9XY]+$
+  # Install dir
+  install_dir: resources/data/genome
   # ENCODE Blacklist URLs
   blacklist_hg19: https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg19-blacklist.v2.bed.gz
   blacklist_hg38: https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz

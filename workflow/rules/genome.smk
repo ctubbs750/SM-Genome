@@ -33,7 +33,7 @@ INSTALLED_BLACKLIST = path.join(INSTALL_DIR, "{build}", "{build}.blacklist.bed")
 rule all:
     input:
         expand(INSTALLED_GENOME, build=BUILDS),
-        expand("resources/data/genome/{BUILD}/{BUILD}.blacklist.bed", BUILD=BUILDS),
+        expand(INSTALLED_BLACKLIST, BUILD=BUILDS),
     default_target: True
 
 

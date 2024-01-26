@@ -33,4 +33,3 @@ rule all:
         """
     input:
         rules.genome_all.input,
-    default_target: True

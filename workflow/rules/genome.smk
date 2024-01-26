@@ -33,8 +33,7 @@ INSTALLED_BLACKLIST = path.join(INSTALL_DIR, "{build}", "{build}.blacklist.bed")
 rule all:
     input:
         expand(INSTALLED_GENOME, build=BUILDS),
-        expand(INSTALLED_BLACKLIST, BUILD=BUILDS),
-    default_target: True
+        expand(INSTALLED_BLACKLIST, build=BUILDS),
 
 
 rule install_genome:
@@ -77,8 +76,9 @@ rule install_blacklist:
     output:
         INSTALLED_BLACKLIST,
     params:
-        hg19_url=BLACKLIST_HG19_URL,
-        hg38_url=BLACKLIST_HG38_URL,
+        url=lambda wildcards: BLACKLIST_HG19_URL
+        if wildcards.build == "hg19"
+        else BLACKLIST_HG38_URL,
     conda:
         "../envs/genome.yaml"
     threads: 1
@@ -86,11 +86,4 @@ rule install_blacklist:
         stdout="workflow/logs/install_blacklist-{build}.stdout",
         stderr="workflow/logs/install_blacklist-{build}.stderr",
     shell:
-        """
-        if [ {wildcards.build} == "hg19" ]
-        then
-            wget -O - {params.hg19_url} | gunzip > {output}
-        else
-            wget -O - {params.hg38_url} | gunzip > {output}
-        fi
-        """
+        "wget -O - {params.url} | gunzip > {output}"
